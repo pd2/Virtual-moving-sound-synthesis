@@ -82,7 +82,7 @@ if ~(exist('enable_automation','var') && enable_automation)
     speed = 100; % deg/s
     
     % specify the angular resolution at which to move the sound source
-    angular_res = 10;  % in degrees
+    angular_res = 1;  % in degrees
     
     % specify the auditory object trajectory
     % note: make a closed loop to avoid sudden jumps
