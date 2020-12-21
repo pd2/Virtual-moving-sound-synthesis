@@ -5,7 +5,7 @@
 % Institute of Neuroscience, Newcastle University, NCL, UK
 % (C) copyright reserved 2015
 
-clear all; close all; clc
+clear; close all; clc
 
 % set this flag to 1 to use this via wrapper
 enable_automation = 1;
@@ -19,8 +19,11 @@ inp_path = 'input/';
 % specify the path to the output file
 output_path = 'outputs_v7p8/';
 
+% specify the prefix for the output file names
+op_filename_prefix = 'moving_sound_subj_';
+
 % specify the file to obtain the response
-inp_file = 'modulated_am_noise_80_fs48k_chop.wav';
+inp_file = 'modulated_am_noise_80_fs48k.wav';
 
 % specify subject number from 1 to 5
 subj_no_list = [1 2 3 4 5];
@@ -57,7 +60,7 @@ for subj_no = subj_no_list
                 trajectory_list = traj{1};
                 
                 % call to the actual program that implements the method
-                virtual_moving_sound_synthesis_wisc_v7p8.m;
+                virtual_moving_sound_synthesis_wisc_v7p8;
                 
             end
         end

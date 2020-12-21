@@ -64,19 +64,19 @@ if ~(exist('enable_automation','var') && enable_automation)
     
     % User defined configurations - used if script automation is disabled
 
-    clear all; close all; clc
+    clear; close all; clc
     
     % specify the path to the datasets
     db_path = 'dataset/'; 
     
     % specify the path to the input file
-    inp_path = 'dataset/';
+    inp_path = 'input/';
 
     % specify the path to the output
-    out_path = 'dbg/';
+    out_path = 'output/';
     
     % specify subject number from 1 to 5; 0- average of subjects
-    subj_no = 0;
+    subj_no = 1;
     
     % specify the speed in degrees per second
     speed = 100; % deg/s
@@ -93,13 +93,12 @@ if ~(exist('enable_automation','var') && enable_automation)
     trajectory_list = [ 1 2 3 4];
     
     % specify the file to obtain the response
-    % inp_file = 'modulated_am_noise_80_fs50k.wav'; % 'Vintro.wav'; %
-    % inp_file = 'Vintro.wav'; 
-     inp_file = 'modulated_am_noise_100_fs48k_chop.wav';
+    % inp_file = 'modulated_am_noise_80_fs48k.wav';
+      inp_file = 'Vintro.wav'; 
     
     % specify the prefix for the output file names
     op_filename_prefix = 'moving_sound_subj_';
-    op_filename_prefix = 'AM100hz_noise_'; % 'moving_sound_subj_';
+    % op_filename_prefix = 'AM100hz_noise_';
     
 end
 
@@ -154,7 +153,7 @@ tmp_path = 'tmp/';
 
 % flag to specify the amount of info printed on screen. Error msgs are not
 % affected by this setting. % 0: silent  1: minimal  2: all  3: debug info
-verbose = 0;
+verbose = 3;
 
 
 
@@ -293,7 +292,11 @@ end
 if (exist(inp_path,'dir'))
     file = [inp_path '/' inp_file];
     if (exist(file,'file'))
-        [inp_signal, Fs_inp, n_bits] = wavread(file);
+        try
+            [inp_signal, Fs_inp] = audioread(file);
+        catch
+            [inp_signal, Fs_inp, n_bits] = wavread(file);
+        end
     else
         disp('Error: Input file does not exist');
         return;
@@ -835,7 +838,11 @@ for k = 1:num_azi
         if flag_debug
             % tmp_file = [subj_list{subj_no} '_el_' num2str(elevation) '_az_' num2str(arr_azi(k)) ];
             tmp_file = [subj_name '_blk_' num2str(k) ];
-            wavwrite(resp_blk, fs, n_bits, [tmp_path '/' tmp_file file_extn]);
+            try
+                audiowrite([tmp_path '/' tmp_file file_extn], resp_blk, fs);
+            catch
+                wavwrite(resp_blk, fs, n_bits, [tmp_path '/' tmp_file file_extn]);
+            end
         end
         
         % block concatenation
